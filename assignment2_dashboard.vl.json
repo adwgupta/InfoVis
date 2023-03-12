@@ -1,0 +1,547 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "name": "AdityaaGupta_LukeRickard_Assignment2.vl.json",
+  "title": {
+    "text": "US Wind Turbine Explorer",
+    "fontSize": 25,
+    "anchor": "middle"
+  },
+
+  "data": {
+    "url": "https://raw.githubusercontent.com/adwgupta/InfoVis/master-jedi/windTurbines.csv",
+    "format": {
+      "type": "csv"
+    }
+  },
+
+  "vconcat": [
+    {
+      "hconcat": [
+        {
+          "width": 500,
+          "height": 600,
+          "transform": [
+            {
+              "filter": {
+                "param": "bar_click"
+              }
+            },
+            {
+              "filter": {
+                "param": "bar_click2"
+              }
+            },
+            {
+              "filter": {
+                "param": "bar_brush"
+              }
+            },
+            {
+              "filter": {
+                "param": "bar_click3"
+              }
+            }
+          ],
+
+          "layer": [
+            {
+              "projection": {
+                "type": "albersUsa"
+              },
+
+              "data": {
+                "url": "https://raw.githubusercontent.com/vega/vega/main/docs/data/us-10m.json",
+                "format": {
+                  "type": "topojson",
+                  "feature": "states"
+                }
+              },
+
+              "mark": {
+                "type": "geoshape",
+                "fill": "#e2f3ea",
+                "stroke": "black"
+              }
+            },
+
+            {
+              "params": [
+                {
+                  "name": "turbnePower",
+                  "select": {
+                    "type": "point",
+                    "fields": [
+                      "TurbineCapacityCat"
+                    ]
+                  },
+                  "bind": "legend"
+                }
+              ],
+
+              "mark": {
+                "type": "circle"
+              },
+
+              "encoding": {
+                "longitude": {
+                  "field": "long",
+                  "type": "quantitative"
+                },
+
+                "latitude": {
+                  "field": "lat",
+                  "type": "quantitative"
+                },
+
+                "color": {
+                  "value": "lightgrey",
+                  "condition": {
+                    "param": "turbnePower",
+                    "field": "turbineManufacturer",
+                    "type": "nominal",
+                    "legend": null
+                  }
+                },
+
+                "opacity": {
+                  "condition": [
+                    {
+                      "param": "turbnePower",
+                      "value": 0.77
+                    }
+                  ],
+                  "value": 0
+                },
+
+                "size": {
+                  "field": "TurbineCapacityCat",
+                  "type": "ordinal",
+                  "scale": {
+                    "rangeMax": 90
+                  },
+                  "legend": {
+                    "orient": "top-left"
+                  },
+                  "sort": [
+                    "Small",
+                    "Medium",
+                    "Large"
+                  ]
+                },
+
+                "tooltip": [
+                  {
+                    "field": "projectTurbineNumber",
+                    "type": "quantitative"
+                  },
+                  {
+                    "field": "turbineCapacity",
+                    "type": "quantitative"
+                  },
+                  {
+                    "field": "projectName",
+                    "type": "nominal"
+                  },
+                  {
+                    "field": "projectYear",
+                    "type": "quantitative"
+                  },
+                  {
+                    "field": "turbineState",
+                    "type": "nominal"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+
+        {
+          "height": 600,
+          "width": 200,
+          "mark": {
+            "type": "bar",
+            "description": "To select  multiple manufacturers please use shift click"
+          },
+
+          "transform": [
+            {
+              "filter": {
+                "param": "turbnePower"
+              }
+            },
+            {
+              "filter": {
+                "param": "bar_click2"
+              }
+            },
+            {
+              "filter": {
+                "param": "bar_brush"
+              }
+            },
+            {
+              "filter": {
+                "param": "bar_click3"
+              }
+            }
+          ],
+
+          "params": [
+            {
+              "name": "bar_click",
+              "select": {
+                "type": "point",
+                "encodings": [
+                  "color"
+                ]
+              }
+            }
+          ],
+
+          "encoding": {
+            "x": {
+              "aggregate": "count",
+              "title": "#Turbines"
+            },
+
+            "y": {
+              "field": "turbineManufacturer",
+              "title": null,
+              "type": "nominal",
+              "scale": {
+                "type": "log",
+                "domainMin": 1,
+                "domainMax": 23000
+              },
+              "sort": "-x"
+            },
+
+            "color": {
+              "value": "lightgrey",
+              "condition": {
+                "param": "bar_click",
+                "field": "turbineManufacturer",
+                "type": "nominal",
+                "legend": null,
+                "scale": {
+                  "domain": [
+                    "GE Wind",
+                    "Vestas",
+                    "Siemens",
+                    "Mitsubishi",
+                    "Gamesa",
+                    "Suzlon",
+                    "Kenetech",
+                    "Acciona",
+                    "NEG Micon",
+                    "Clipper",
+                    "Nordex",
+                    "Micon",
+                    "REpower",
+                    "Bonus",
+                    "Enron",
+                    "Zond",
+                    "Nordtank",
+                    "SGRE",
+                    "Goldwind",
+                    "Danwin"
+                  ],
+
+                  "range": [
+                    "#fdbf6f",
+                    "#1f78b4",
+                    "#b2df8a",
+                    "#33a02c",
+                    "#fb9a99",
+                    "#e31a1c",
+                    "#cab2d6",
+                    "#6a3d9a",
+                    "#b15928",
+                    "#E69F00",
+                    "#41b6e6",
+                    "#D55E00",
+                    "#be84a3",
+                    "#a6cee3",
+                    "#e31a1c",
+                    "#8c6bb1",
+                    "#8dd3c7",
+                    "#737373",
+                    "#800026",
+                    "#9ecae1"
+                  ]
+                }
+              }
+            }
+          }
+        },
+
+        {
+          "height": 600,
+          "width": 200,
+          "mark": {
+            "type": "bar",
+            "description": "To select  multiple states please use shift click, in order to select a state which might not show up due to its size, a brush tool has been added"
+          },
+
+          "transform": [
+            {
+              "filter": {
+                "param": "turbnePower"
+              }
+            },
+            {
+              "filter": {
+                "param": "bar_click"
+              }
+            },
+            {
+              "filter": {
+                "param": "bar_click3"
+              }
+            }
+          ],
+
+          "params": [
+            {
+              "name": "bar_click2",
+              "select": {
+                "type": "point",
+                "encodings": [
+                  "y"
+                ]
+              }
+            },
+
+            {
+              "name": "bar_brush",
+              "select": {
+                "type": "interval",
+                "resolve": "global"
+              }
+            }
+          ],
+
+          "encoding": {
+            "x": {
+              "aggregate": "count",
+              "title": "#Turbines"
+            },
+
+            "y": {
+              "field": "turbineState",
+              "title": null,
+              "type": "nominal",
+              "scale": {
+                "type": "log"
+              },
+              "sort": "-x"
+            },
+
+            "color": {
+              "value": "lightgrey",
+              "condition": {
+                "param": "bar_click2",
+                "field": "turbineManufacturer",
+                "type": "nominal",
+                "legend": null
+              }
+            }
+          }
+        }
+      ]
+    },
+
+    {
+      "hconcat": [
+        {
+          "height": 500,
+          "width": 450,
+          "transform": [
+            {
+              "filter": {
+                "param": "turbnePower"
+              }
+            },
+            {
+              "filter": {
+                "param": "bar_click"
+              }
+            },
+            {
+              "filter": {
+                "param": "bar_click2"
+              }
+            },
+            {
+              "filter": {
+                "param": "bar_brush"
+              }
+            }
+          ],
+
+          "params": [
+            {
+              "name": "bar_click3",
+              "select": {
+                "type": "point",
+                "encodings": [
+                  "x"
+                ]
+              }
+            }
+          ],
+
+          "mark": {
+            "type": "bar",
+            "cornerRadiusTopLeft": 3,
+            "cornerRadiusTopRight": 3
+          },
+
+          "encoding": {
+            "x": {
+              "field": "projectYear",
+              "title": "Years",
+              "type": "quantitative",
+              "scale": {
+                "domainMax": 2018
+              }
+            },
+
+            "y": {
+              "field": "turbineCapacity",
+              "title": "Turbine Power Capacity (kW)",
+              "type": "quantitative"
+            },
+
+            "color": {
+              "value": "lightgrey",
+              "condition": {
+                "param": "bar_click3",
+                "field": "turbineManufacturer",
+                "type": "nominal",
+                "legend": null
+              }
+            },
+
+            "tooltip": [
+              {
+                "field": "turbineState",
+                "type": "nominal"
+              },
+              {
+                "field": "turbineManufacturer",
+                "type": "nominal"
+              },
+              {
+                "field": "projectName",
+                "type": "nominal"
+              },
+              {
+                "field": "projectTurbineNumber",
+                "type": "quantitative"
+              }
+            ]
+          }
+        },
+
+        {
+          "height": 500,
+          "width": 450,
+          "mark": {
+            "type": "rect"
+          },
+          "transform": [
+            {
+              "filter": {
+                "param": "turbnePower"
+              }
+            },
+            {
+              "filter": {
+                "param": "bar_click"
+              }
+            },
+            {
+              "filter": {
+                "param": "bar_click2"
+              }
+            },
+            {
+              "filter": {
+                "param": "bar_brush"
+              }
+            },
+            {
+              "filter": {
+                "param": "bar_click3"
+              }
+            }
+          ],
+
+          "config": {
+            "axis": {
+              "ticks": false,
+              "labelPadding": 10,
+              "domain": false
+            },
+            
+            "view": {
+              "strokeWidth": 0
+            }
+          },
+
+          "encoding": {
+            "y": {
+              "field": "turbineState",
+              "type": "ordinal",
+              "axis": {
+                "title": null
+              }
+            },
+
+            "x": {
+              "field": "turbineManufacturer",
+              "type": "ordinal",
+              "axis": {
+                "title": null
+              }
+            },
+
+            "color": {
+              "field": "turbineCapacity",
+              "type": "quantitative",
+              "aggregate": "sum",
+              "scale": {
+                "scheme": "blues"
+              }
+            },
+
+            "tooltip": [
+              {
+                "field": "turbineManufacturer",
+                "type": "nominal"
+              },
+              {
+                "field": "projectTurbineNumber",
+                "type": "quantitative"
+              },
+              {
+                "field": "projectName",
+                "type": "nominal"
+              },
+              {
+                "field": "projectYear",
+                "type": "quantitative"
+              },
+              {
+                "field": "turbineCapacity",
+                "type": "quantitative"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}
